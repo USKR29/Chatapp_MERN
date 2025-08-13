@@ -1,16 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+
+import Login from './Components/Login';
+import {Routes,Route, BrowserRouter} from 'react-router-dom'
+import Signup from './Components/Signup';
+import { Messanger } from './Components/Messanger';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div className=' text-amber-600'>Chat app</div>
-    </>
+    <BrowserRouter>
+    
+        <Routes>
+          <Route path='/' Component={Login}/>
+          <Route path='/signup' Component={Signup}/>
+          <Route path='/chat' Component={Messanger}/>
+        </Routes>
+
+    </BrowserRouter>
   )
+  
 }
 
 export default App

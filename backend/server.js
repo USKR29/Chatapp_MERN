@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/api/auth',router);
 app.use('/api/message',messageRouter);
 
-app.listen(process.env.PORT, ()=>{
+app.listen(4000, ()=>{
     connectDB();
     console.log('Server is running')
 

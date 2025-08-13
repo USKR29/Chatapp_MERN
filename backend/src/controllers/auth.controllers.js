@@ -43,11 +43,11 @@ export const signup=async(req, res)=>{
         const user = await User.findOne({email})//check if email already exists
 
         if(!name || !email || !password){
-            return res.status(404).json({message:'All fields are required'})
+            return res.status(404).json({Error:'All fields are required'})
         }
 
         if(user){
-           return res.status(404).json({message:'The user already exists. Please login'})
+           return res.status(404).json({Error:'The user already exists. Please login'})
         }
         //bcrypt  plain password
 
