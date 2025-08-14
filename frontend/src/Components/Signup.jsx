@@ -29,6 +29,8 @@ const handleSubmit=async(e)=>{
        setErrmsg(srror.Error)
        return
     }
+    const data = res.json()
+    localStorage.setItem('Token',JSON.stringify(data))
     setErrmsg('')
     console.log('added successful')
     
@@ -98,9 +100,9 @@ return (
                 Already have an account?{" "}
                 
                     <Link to={'/'}  className="text-indigo-600 hover:underline">Login</Link>
-                
+                {errmsg && <div className=' text-red-400 pt-2'>{errmsg}</div>}
             </p>
-            {errmsg && <div className=' text-red-400'>{errmsg}</div>}
+            
         </div>
     </div>
 )

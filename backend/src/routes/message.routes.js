@@ -7,7 +7,7 @@ const messageRouter = express.Router()
 
 
 messageRouter.post('/',chat)
-messageRouter.get('/:id', messanger)
+messageRouter.get('/', messanger)
 
 
 

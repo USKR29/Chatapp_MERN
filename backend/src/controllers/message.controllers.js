@@ -21,16 +21,20 @@ export const chat=async(req, res)=>{
 // This below func will fetch particular conversation using id
 export const messanger=async(req,res)=>{
 
-    const {messageId} = req.params;
+    // const {messageId} = req.params;
 
     try {
 
-        const chats = await Messages.findOne({messageId}).select('text')
+        const chats = await Messages.find({})
+
+        if(!chats){
+            return res.status(404).json({Error:'Unable to fetch the chat history'})
+        }
 
         return res.status(200).json({chats})
         
     } catch (error) {
-        return res.status(500).json({Error: error,message})
+        return res.status(500).json({error})
     }
 
 }

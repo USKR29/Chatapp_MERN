@@ -5,6 +5,7 @@ import router from './src/routes/auth.routes.js';
 import messageRouter from './src/routes/message.routes.js';
 
 
+
 const app = express();
 
 app.use(express.json());

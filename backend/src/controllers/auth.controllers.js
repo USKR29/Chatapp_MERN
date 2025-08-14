@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 // for user login
 export const login= async(req,res)=>{
 
+
    const {email, password} = req.body
    
    try {
@@ -24,7 +25,7 @@ export const login= async(req,res)=>{
 
    const token = generateToken(checkEmail._id)
 
-   return res.status(200).json({message:'Login sucess', token})
+   return res.status(200).json({message:'Login sucess', token, profile:checkEmail.name})
     
    } catch (error) {
     
@@ -73,4 +74,26 @@ export const signup=async(req, res)=>{
         
     }
     
+}
+
+export const allUsers=async(req,res)=>{
+
+     try {
+
+        const data = await User.find({}).select('_id name') //need to add login to remove the current user
+
+        if(!data){
+
+            return res.status(200).json({Message:'No users available'})
+
+        }
+
+        return res.status(200).json(data)
+        
+    } catch (error) {
+
+        return res.status(404).json({Error: 'Unable to fetch users'})
+        
+    }
+
 }
