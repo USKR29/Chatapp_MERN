@@ -25,7 +25,7 @@ export const login= async(req,res)=>{
 
    const token = generateToken(checkEmail._id)
 
-   return res.status(200).json({message:'Login sucess', token, profile:checkEmail.name})
+   return res.status(200).json({message:'Login sucess', token, profile:checkEmail.name, uId:checkEmail._id})
     
    } catch (error) {
     

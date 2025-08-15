@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import ChatBubble from './chatBubble';
+import { AuthContext } from '../Context/AuthContext';
 
 
 export const Messanger = () => {
 
+    const usertk = localStorage.getItem('Token')
+    const token = usertk? JSON.parse(usertk).token : null;
+    const {user} = useContext(AuthContext)
+    const [selectedId,setSeletctedId]=useState(null)
+
+    const [text,setText]=useState('')
+
     const[msg,setMsg]= useState('')
     const [data,setData]=useState([]);
-    
 
+    
 
    useEffect(()=>{
 
@@ -19,7 +27,7 @@ export const Messanger = () => {
 
             const frndlist = await fetch('/api/auth/users',{
                 method:'GET',
-                headers:{'Content-type':'applicaton/json'}
+                headers:{'Content-Type':'application/json'}
             })
 
             if(!frndlist.ok){
@@ -40,6 +48,44 @@ export const Messanger = () => {
      frend();
    },[])
 
+   const sendMessage=async()=>{
+
+    if(!selectedId){
+        alert('Please select a user to chat')
+        return
+    }
+   
+
+
+    const txt = {senderId:user.uId,receiverId:selectedId, text}
+
+    try {
+
+        const response = await fetch('/api/message',{
+
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json',
+                'Authorization':`Bearer ${token}`
+                },
+            body:JSON.stringify(txt)
+
+        })
+        
+
+        if(!response.ok){
+            console.log('somthing went wrong')
+            return
+        }
+
+
+
+    } catch (error) {
+        
+    }
+
+   }
+
 
     return (
          
@@ -52,7 +98,7 @@ export const Messanger = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto">
                     {/* Example users */}
-                    {data.map((user)=><div key={user.id} className="flex items-center px-6 py-3 hover:bg-gray-100 cursor-pointer border-b">
+                    {data.map((user)=><div key={user.id || user._id} onClick={()=> setSeletctedId(user._id)} className="flex items-center px-6 py-3 hover:bg-gray-100 cursor-pointer border-b">
                         <img
                             src="https://ui-avatars.com/api/?name=John"
                             alt="John"
@@ -90,16 +136,18 @@ export const Messanger = () => {
 
                 {/* Messages */}
                 
-                <ChatBubble/>
+                <ChatBubble rId={selectedId}/>
 
                 {/* Input */}
                 <div className="px-6 py-4 bg-white flex items-center space-x-3 border-t">
                     <input
                         type="text"
                         placeholder="Type your message..."
+                        value={text}
+                        onChange={(e)=>setText(e.target.value)}
                         className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition">
+                    <button  onClick={sendMessage} className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition">
                         Send
                     </button>
                 </div>

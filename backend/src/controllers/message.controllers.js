@@ -3,7 +3,9 @@ import Messages from "../models/message.model.js";
 //To send text message to sender
 export const chat=async(req, res)=>{
 
-    const{senderId, receiverId, text} = req.body;
+    const{senderId,receiverId, text} = req.body;
+     
+    //  const senderId = req.user._id;
 
     try {
 
@@ -38,3 +40,4 @@ export const messanger=async(req,res)=>{
     }
 
 }
+

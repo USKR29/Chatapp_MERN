@@ -1,40 +1,60 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import useFetchChat from '../hooks/useFetchChat'
+import { AuthContext } from '../Context/AuthContext'
 
-const ChatBubble = () => {
+const ChatBubble = ({rId}) => {
 
     const {data,error} = useFetchChat()
+    const {user} = useContext(AuthContext)
 
+    if(!user){
+        return <div>Loading....</div>
+    }
+
+
+
+    const currentId = user.uId;
+    const recvId = rId;
   
   return (
 
     
     <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4 bg-gray-50">
-                    {/* Incoming message */}
-                   {data?.chats.map((chat)=><div key={chat.id} className="flex items-start space-x-3">
-                        <img
-                            src="https://ui-avatars.com/api/?name=John"
-                            alt="John"
-                            className="w-8 h-8 rounded-full"
-                        />
-                        <div className="bg-white px-4 py-2 rounded-lg shadow text-gray-800 max-w-xs">
+            {error && <div>{error}</div>}
+            {data?.chats?.map((chat) => {
+                const isOutgoing = chat.senderId === currentId;
+                return (
+                    <div
+                        key={chat._id}
+                        className={`flex items-end space-x-3 ${isOutgoing ? 'justify-end' : 'justify-start'}`}
+                    >
+                        {!isOutgoing && (
+                            <img
+                                src={`https://ui-avatars.com/api/?name=Friend`}
+                                alt="Friend"
+                                className="w-8 h-8 rounded-full"
+                            />
+                        )}
+                        <div
+                            className={`px-4 py-2 rounded-lg shadow max-w-xs ${
+                                isOutgoing
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-white text-gray-800'
+                            }`}
+                        >
                             {chat.text}
                         </div>
-                    </div>) }
-                    {/* Outgoing message */}
-                   
-                    <div className="flex items-end justify-end space-x-3">
-                        <div className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow max-w-xs">
-                            I'm good, thanks! How about you?
-                        </div>
-                        <img
-                            src="https://ui-avatars.com/api/?name=User"
-                            alt="User"
-                            className="w-8 h-8 rounded-full"
-                        />
+                        {isOutgoing && (
+                            <img
+                                src={`https://ui-avatars.com/api/?name=You`}
+                                alt="You"
+                                className="w-8 h-8 rounded-full"
+                            />
+                        )}
                     </div>
-                    {/* More messages can go here */}
-                </div>
+                );
+            })}
+        </div>
   )
 }
 
